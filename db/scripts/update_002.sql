@@ -1,4 +1,4 @@
-CREATE TABLE ticket (
+CREATE TABLE tickets (
                         id SERIAL PRIMARY KEY,
                         session_id INT NOT NULL,
                         row INT NOT NULL,
