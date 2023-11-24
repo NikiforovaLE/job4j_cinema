@@ -12,8 +12,7 @@ public class Seat {
     private final int seat;
     private boolean isBought;
 
-    public Seat(int id, int row, int seat) {
-        this.id = id;
+    public Seat(int row, int seat) {
         this.row = row;
         this.seat = seat;
     }

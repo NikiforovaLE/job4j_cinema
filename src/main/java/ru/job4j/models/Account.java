@@ -1,12 +1,10 @@
 package ru.job4j.models;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Objects;
 
-@AllArgsConstructor
 @Getter
 @Setter
 public class Account {
@@ -14,6 +12,12 @@ public class Account {
     private String name;
     private String email;
     private String phone;
+
+    public Account(String name, String email, String phone) {
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
+    }
 
     @Override
     public boolean equals(Object o) {

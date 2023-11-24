@@ -19,7 +19,7 @@ public class AccountStore implements Store<Account> {
         try (Connection cn = pool.getConnection(); PreparedStatement ps = cn.prepareStatement("SELECT * FROM accounts;")) {
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    accounts.add(new Account(rs.getInt("id"), rs.getString("name"),
+                    accounts.add(new Account(rs.getString("name"),
                             rs.getString("email"), rs.getString("phone")));
                 }
             }
@@ -31,6 +31,17 @@ public class AccountStore implements Store<Account> {
 
     @Override
     public Account findById(int id) {
+        try (Connection cn = pool.getConnection()) {
+            PreparedStatement ps = cn.prepareStatement("SELECT * FROM accounts WHERE id = ?;");
+            ps.setInt(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return new Account(rs.getString("name"), rs.getString("email"), rs.getString("'phone"));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
