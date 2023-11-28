@@ -25,27 +25,30 @@
         crossorigin="anonymous"></script>
 <script>
     function pay() {
-
+        window.location.href = '/cinema/payment.html';
     }
 
     $(document).ready(function () {
         $.ajax({
-            type: 'GET',
-            url: 'http://localhost:8080/dreamjob/greet',
+                type: 'GET',
+                url: 'http://localhost:8080/dreamjob/greet',
+            dataType: 'json',
+            success: function(data){
 
+            }
             }
         )
     });
 </script>
 <div class="container">
     <div class="row pt-3">
-        <h4>
+        <h4 style="text-align: center">
             Бронирование мест на сеанс
         </h4>
         <table class="table table-borderless">
             <thead>
             <tr>
-                <th style="width: 120px;">Ряд / Место</th>
+                <th style="width: 130px;">Ряд / Место</th>
                 <th>1</th>
                 <th>2</th>
                 <th>3</th>
@@ -55,20 +58,20 @@
             <tr>
                 <th>1</th>
                 <td><input type="radio" name="place" value="11"> Ряд 1, Место 1</td>
-                <td><input type="radio" name="place" value="11"> Ряд 1, Место 1</td>
-                <td><input type="radio" name="place" value="11"> Ряд 1, Место 1</td>
+                <td><input type="radio" name="place" value="12"> Ряд 1, Место 2</td>
+                <td><input type="radio" name="place" value="13"> Ряд 1, Место 3</td>
             </tr>
             <tr>
                 <th>2</th>
-                <td><input type="radio" name="place" value="11"> Ряд 2, Место 1</td>
-                <td><input type="radio" name="place" value="11"> Ряд 2, Место 1</td>
-                <td><input type="radio" name="place" value="11"> Ряд 2, Место 1</td>
+                <td><input type="radio" name="place" value="21"> Ряд 2, Место 1</td>
+                <td><input type="radio" name="place" value="22"> Ряд 2, Место 2</td>
+                <td><input type="radio" name="place" value="23"> Ряд 2, Место 3</td>
             </tr>
             <tr>
                 <th>3</th>
-                <td><input type="radio" name="place" value="11"> Ряд 3, Место 1</td>
-                <td><input type="radio" name="place" value="11"> Ряд 3, Место 1</td>
-                <td><input type="radio" name="place" value="11"> Ряд 3, Место 1</td>
+                <td><input type="radio" name="place" value="31"> Ряд 3, Место 1</td>
+                <td><input type="radio" name="place" value="32"> Ряд 3, Место 2</td>
+                <td><input type="radio" name="place" value="33"> Ряд 3, Место 3</td>
             </tr>
             </tbody>
         </table>
