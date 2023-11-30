@@ -20,6 +20,15 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
             integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
             crossorigin="anonymous"></script>
+    <script>
+        function validate() {
+            if ($('username').val() === '' || $('phone').val() === '') {
+                alert("Заполните все поля!");
+                return false;
+            }
+            return true;
+        }
+    </script>
 </head>
 <body>
 <div class="container">
@@ -38,7 +47,7 @@
                 <label for="phone">Номер телефона</label>
                 <input type="text" class="form-control" id="phone" placeholder="Номер телефона">
             </div>
-            <button type="button" class="btn btn-success">Оплатить</button>
+            <button type="button" class="btn btn-success" onclick="return validate()">Оплатить</button>
         </form>
     </div>
 </div>
