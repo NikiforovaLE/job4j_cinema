@@ -28,6 +28,10 @@
             }
             return true;
         }
+
+        function showHideControl() {
+            $('#email').toggle();
+        }
     </script>
 </head>
 <body>
@@ -46,6 +50,11 @@
             <div class="form-group">
                 <label for="phone">Номер телефона</label>
                 <input type="text" class="form-control" id="phone" placeholder="Номер телефона">
+            </div>
+            <div class="checkbox">
+                <label for="email">Получить билет на почту</label>
+                <input onchange="showHideControl();" type="checkbox" id="email" name="email"/>
+                <input onchange="showHideControl();" type="email" placeholder="email"/>
             </div>
             <button type="button" class="btn btn-success" onclick="return validate()">Оплатить</button>
         </form>
