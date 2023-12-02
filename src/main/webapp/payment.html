@@ -21,11 +21,27 @@
             integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
             crossorigin="anonymous"></script>
     <script>
+        function payTicket() {
+            var userName = $('username');
+            $.ajax({
+                type: 'POST',
+                url: 'http://localhost:8080/cinema/hall.do',
+                dataType: 'application/hall.do',
+            }).done(function (data) {
+                    console.log(userName);
+                }
+            ).fail(function (err) {
+                console.log(err);
+            });
+            window.location.href = 'http://localhost:8080/cinema';
+        }
+
         function validate() {
             if ($('username').val() === '' || $('phone').val() === '') {
                 alert("Заполните все поля!");
                 return false;
             }
+            payTicket();
             return true;
         }
 
