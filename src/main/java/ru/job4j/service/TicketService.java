@@ -5,8 +5,10 @@ import ru.job4j.models.Seat;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.Objects;
-import java.util.Properties;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.*;
 
 public class TicketService implements Service<Seat> {
     private final BasicDataSource pool = new BasicDataSource();
@@ -43,6 +45,42 @@ public class TicketService implements Service<Seat> {
 
     public static Service<Seat> instOf() {
         return TicketService.Lazy.INST;
+    }
+
+    @Override
+    public Collection<Seat> findAll() {
+        List<Seat> seats = new ArrayList<>();
+        try (Connection cn = pool.getConnection()) {
+            PreparedStatement ps = cn.prepareStatement("SELECT * FROM tickets");
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    seats.add(new Seat(rs.getInt("row"), rs.getInt("seat")));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return seats;
+    }
+
+    @Override
+    public Seat findById(int id) {
+        try (Connection cn = pool.getConnection()) {
+            PreparedStatement ps = cn.prepareStatement("SELECT * FROM tickets WHERE id =?");
+            ps.setInt(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return new Seat(rs.getInt("row"), rs.getInt("seat"));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override
