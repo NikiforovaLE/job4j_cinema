@@ -47,11 +47,55 @@ public class AccountStore implements Store<Account> {
 
     @Override
     public void save(Account account) {
+        if (account.getId() == 0) {
+            create(account);
+        } else {
+            update(account);
+        }
+    }
 
+    private Account create(Account account) {
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps = cn.prepareStatement("INSERT INTO accounts(username, email, phone) VALUES (?,?,?)",
+                     PreparedStatement.RETURN_GENERATED_KEYS)
+        ) {
+            ps.setString(1, account.getName());
+            ps.setString(2, account.getEmail());
+            ps.setString(3, account.getPhone());
+            ps.execute();
+            try (ResultSet id = ps.getGeneratedKeys()) {
+                if (id.next()) {
+                    account.setId(id.getInt(1));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return account;
+    }
+
+    private void update(Account account) {
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps = cn.prepareStatement(
+                     "UPDATE accounts SET username = ?, email = ?, phone = ? WHERE id = ?")) {
+            ps.setString(1, account.getName());
+            ps.setString(2, account.getEmail());
+            ps.setString(3, account.getPhone());
+            ps.setInt(4, account.getId());
+            ps.execute();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
-    public void delete(Account account) {
-
+    public void delete(int id) {
+        try (Connection conn = this.pool.getConnection();
+             PreparedStatement st = conn.prepareStatement("DELETE FROM accounts WHERE id = ?;")) {
+            st.setInt(1, id);
+            st.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

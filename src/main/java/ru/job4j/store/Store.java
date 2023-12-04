@@ -9,5 +9,5 @@ public interface Store<E> {
 
     void save(E e);
 
-    void delete(E account);
+    void delete(int id);
 }

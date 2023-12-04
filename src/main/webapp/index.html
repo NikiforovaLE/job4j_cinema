@@ -24,6 +24,14 @@
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
 <script>
+    function validate() {
+        if ($('input[name=place]:checked').length === 0) {
+            alert("Выберите место!");
+            return false;
+        }
+        return true;
+    }
+
     function pay() {
         window.location.href = '/cinema/payment.html';
     }
@@ -32,10 +40,10 @@
         $.ajax({
                 type: 'GET',
                 url: 'http://localhost:8080/dreamjob/greet',
-            dataType: 'json',
-            success: function(data){
+                dataType: 'json',
+                success: function (data) {
 
-            }
+                }
             }
         )
     });
