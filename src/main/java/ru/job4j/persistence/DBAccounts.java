@@ -1,7 +1,7 @@
-package ru.job4j.store;
+package ru.job4j.persistence;
 
 import org.apache.commons.dbcp2.BasicDataSource;
-import ru.job4j.models.Account;
+import ru.job4j.model.Account;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class AccountStore implements Store<Account> {
+public class DBAccounts implements Store<Account> {
     private final BasicDataSource pool = new BasicDataSource();
 
     @Override

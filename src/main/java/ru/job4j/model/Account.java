@@ -1,4 +1,4 @@
-package ru.job4j.models;
+package ru.job4j.model;
 
 import lombok.Getter;
 import lombok.Setter;

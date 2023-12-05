@@ -24,16 +24,19 @@
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
 <script>
+
+    function pay() {
+        var rowAndSeat = $('input[name=place]:checked').val();
+        window.location.href = '/cinema/payment.html?rowAndSeat=' + rowAndSeat;
+    }
+
     function validate() {
         if ($('input[name=place]:checked').length === 0) {
             alert("Выберите место!");
             return false;
         }
+        pay();
         return true;
-    }
-
-    function pay() {
-        window.location.href = '/cinema/payment.html';
     }
 
     $(document).ready(function () {
@@ -85,7 +88,7 @@
         </table>
     </div>
     <div class="row float-right">
-        <button type="button" class="btn btn-success" onclick="pay()">Оплатить</button>
+        <button type="button" class="btn btn-success" onclick="validate()">Оплатить</button>
     </div>
 </div>
 </body>

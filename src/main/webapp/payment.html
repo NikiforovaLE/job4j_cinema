@@ -21,23 +21,25 @@
             integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
             crossorigin="anonymous"></script>
     <script>
-        function payTicket() {
-            var userName = $('username');
+        function getRowAndSeat() {
+            var query = window.location.href.split("=")[1];
             $.ajax({
                 type: 'POST',
-                url: 'http://localhost:8080/cinema/hall.do',
-                dataType: 'application/hall.do',
+                url: "http://localhost:8080/cinema/hall.do",
+                data: query
             }).done(function (data) {
-                    console.log(userName);
-                }
-            ).fail(function (err) {
+                $('#selectedPlace').append("Вы выбрали ряд " + data.row + ", место " + data.seat + ". К оплате: " + 500 + " рублей.")
+            }).fail(function (err) {
                 console.log(err);
             });
+        }
+
+        function payTicket() {
             window.location.href = 'http://localhost:8080/cinema';
         }
 
         function validate() {
-            if ($('username').val() === '' || $('phone').val() === '') {
+            if ($('#username').val() === '' || $('#phone').val() === '') {
                 alert("Заполните все поля!");
                 return false;
             }
@@ -52,12 +54,10 @@
 </head>
 <body>
 <div class="container">
-    <div class="row pt-3">
-        <h4>
-            Вы выбрали ряд 1 место 1, Сумма: 500 рублей.
-        </h4>
+    <div class="row pt-3" id="selectedPlace">
+        <h4></h4>
     </div>
-    <div class="row">
+    <div class="row ">
         <form>
             <div class="form-group">
                 <label for="username">ФИО</label>
@@ -69,8 +69,8 @@
             </div>
             <div class="checkbox">
                 <label for="email">Получить билет на почту</label>
-                <input onchange="showHideControl();" type="checkbox" id="email" name="email"/>
-                <input onchange="showHideControl();" type="email" placeholder="email"/>
+                <input onchange="showHideControl();" type="checkbox"/>
+                <input type="email" id="email" placeholder="email"/>
             </div>
             <button type="button" class="btn btn-success" onclick="return validate()">Оплатить</button>
         </form>

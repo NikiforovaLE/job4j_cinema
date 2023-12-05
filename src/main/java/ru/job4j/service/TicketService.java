@@ -1,7 +1,7 @@
 package ru.job4j.service;
 
 import org.apache.commons.dbcp2.BasicDataSource;
-import ru.job4j.models.Seat;
+import ru.job4j.model.Seat;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
