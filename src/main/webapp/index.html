@@ -41,14 +41,13 @@
 
     $(document).ready(function () {
         $.ajax({
-                type: 'GET',
-                url: 'http://localhost:8080/dreamjob/greet',
-                dataType: 'json',
-                success: function (data) {
-
-                }
+            type: 'GET',
+            url: "http://localhost:8080/cinema/hall.do",
+            dataType: 'json',
+            success: function (data) {
+                $('#seats tr:last').after('<tr><td>' + data + '</td></tr>');
             }
-        )
+        })
     });
 </script>
 <div class="container">
@@ -56,7 +55,7 @@
         <h4 style="text-align: center">
             Бронирование мест на сеанс
         </h4>
-        <table class="table table-borderless">
+        <table class="table table-borderless" id="seats">
             <thead>
             <tr>
                 <th style="width: 130px;">Ряд / Место</th>

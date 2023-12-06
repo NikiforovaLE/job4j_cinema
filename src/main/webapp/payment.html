@@ -21,18 +21,18 @@
             integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
             crossorigin="anonymous"></script>
     <script>
-        function getRowAndSeat() {
-            var query = window.location.href.split("=")[1];
+        $(document).ready(function () {
+            var seatId = window.location.href.split("=")[1];
             $.ajax({
                 type: 'POST',
                 url: "http://localhost:8080/cinema/hall.do",
-                data: query
-            }).done(function (data) {
-                $('#selectedPlace').append("Вы выбрали ряд " + data.row + ", место " + data.seat + ". К оплате: " + 500 + " рублей.")
-            }).fail(function (err) {
-                console.log(err);
-            });
-        }
+                data: seatId,
+                dataType: 'json',
+                success: function (data) {
+                    $('#selectedPlace').append("Вы выбрали ряд " + data.row + ", место " + data.seat + ". К оплате: " + 500 + " рублей.")
+                }
+            })
+        });
 
         function payTicket() {
             window.location.href = 'http://localhost:8080/cinema';
