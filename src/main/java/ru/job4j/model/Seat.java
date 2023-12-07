@@ -7,7 +7,6 @@ import lombok.Setter;
 @Setter
 public class Seat {
     private int id;
-    private int idUser;
     private final int row;
     private final int seat;
     private boolean isBought;
