@@ -51,10 +51,11 @@ public class TicketService implements Service<Seat> {
     public Collection<Seat> findAll() {
         List<Seat> seats = new ArrayList<>();
         try (Connection cn = pool.getConnection()) {
-            PreparedStatement ps = cn.prepareStatement("SELECT * FROM tickets");
+            PreparedStatement ps = cn.prepareStatement("SELECT * FROM places");
             try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    seats.add(new Seat(rs.getInt("row"), rs.getInt("seat")));
+                while (rs.next()) {
+                    seats.add(new Seat(rs.getInt("id"), rs.getInt("row"),
+                            rs.getInt("seat"), rs.getBoolean("bought")));
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -62,17 +63,19 @@ public class TicketService implements Service<Seat> {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        seats.sort(Comparator.comparingInt(Seat::getId));
         return seats;
     }
 
     @Override
     public Seat findById(int id) {
         try (Connection cn = pool.getConnection()) {
-            PreparedStatement ps = cn.prepareStatement("SELECT * FROM tickets WHERE id =?");
+            PreparedStatement ps = cn.prepareStatement("SELECT * FROM places WHERE id=?");
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    return new Seat(rs.getInt("row"), rs.getInt("seat"));
+                    return new Seat(id, rs.getInt("row"), rs.getInt("seat"),
+                            rs.getBoolean("bought"));
                 }
             } catch (Exception e) {
                 e.printStackTrace();

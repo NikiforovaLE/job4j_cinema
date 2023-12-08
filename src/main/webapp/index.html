@@ -8,54 +8,61 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        function validate() {
+            if ($('input[name=place]:checked').length === 0) {
+                alert("Выберите место!");
+                return false;
+            }
+            pay();
+            return true;
+        }
 
+        function pay() {
+            var place = $('input[name=place]:checked').val();
+            window.location.href = '/cinema/payment.html?place=' + place;
+        }
+
+        $(document).ready(function () {
+            $.ajax({
+                type: 'GET',
+                url: 'http://localhost:8080/cinema/hall',
+                dataType: 'json'
+            }).done(function (data) {
+                for (var place of data) {
+                    if (place.seat === 1) {
+                        $('#table').append('</tr><tr><td>' + place.row + '</td>');
+                    }
+                    $('#table tr:last').append('<td><input type="radio" name="place" value=' + place.id + ' checked=' +
+                        place.bought + '>' + 'Ряд ' + place.row + ', Место ' + place.seat + '</td>');
+                }
+            }).fail(function (err) {
+                console.log(err);
+            });
+        });
+    </script>
     <title>Booking</title>
 </head>
 <body>
-<!-- Optional JavaScript -->
-<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-        crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-        crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-        crossorigin="anonymous"></script>
-<script>
-
-    function pay() {
-        var rowAndSeat = $('input[name=place]:checked').val();
-        window.location.href = '/cinema/payment.html?rowAndSeat=' + rowAndSeat;
-    }
-
-    function validate() {
-        if ($('input[name=place]:checked').length === 0) {
-            alert("Выберите место!");
-            return false;
-        }
-        pay();
-        return true;
-    }
-
-    $(document).ready(function () {
-        $.ajax({
-            type: 'GET',
-            url: "http://localhost:8080/cinema/hall.do",
-            dataType: 'json',
-            success: function (data) {
-                $('#seats tr:last').after('<tr><td>' + data + '</td></tr>');
-            }
-        })
-    });
-</script>
 <div class="container">
     <div class="row pt-3">
         <h4 style="text-align: center">
             Бронирование мест на сеанс
         </h4>
-        <table class="table table-borderless" id="seats">
+        <table class="table table-borderless" id="table">
             <thead>
             <tr>
                 <th style="width: 130px;">Ряд / Место</th>
@@ -65,24 +72,6 @@
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <th>1</th>
-                <td><input type="radio" name="place" value="11"> Ряд 1, Место 1</td>
-                <td><input type="radio" name="place" value="12"> Ряд 1, Место 2</td>
-                <td><input type="radio" name="place" value="13"> Ряд 1, Место 3</td>
-            </tr>
-            <tr>
-                <th>2</th>
-                <td><input type="radio" name="place" value="21"> Ряд 2, Место 1</td>
-                <td><input type="radio" name="place" value="22"> Ряд 2, Место 2</td>
-                <td><input type="radio" name="place" value="23"> Ряд 2, Место 3</td>
-            </tr>
-            <tr>
-                <th>3</th>
-                <td><input type="radio" name="place" value="31"> Ряд 3, Место 1</td>
-                <td><input type="radio" name="place" value="32"> Ряд 3, Место 2</td>
-                <td><input type="radio" name="place" value="33"> Ряд 3, Место 3</td>
-            </tr>
             </tbody>
         </table>
     </div>

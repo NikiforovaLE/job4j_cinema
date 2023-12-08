@@ -10,6 +10,6 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>HallServlet</servlet-name>
-    <url-pattern>/hall.do</url-pattern>
+    <url-pattern>/hall</url-pattern>
   </servlet-mapping>
 </web-app>

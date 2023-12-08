@@ -19,9 +19,9 @@ public class HallServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("application/json; charset=utf-8");
-        List<Seat> seats = (List<Seat>) service.findAll();
+        List<Seat> places = (List<Seat>) service.findAll();
         ObjectMapper objectMapper = new ObjectMapper();
-        String stringOfSeats = objectMapper.writeValueAsString(seats);
+        String stringOfSeats = objectMapper.writeValueAsString(places);
         resp.getWriter().write(stringOfSeats);
     }
 
@@ -32,8 +32,6 @@ public class HallServlet extends HttpServlet {
         Seat seat = service.findById(seatId);
         ObjectMapper objectMapper = new ObjectMapper();
         String json = objectMapper.writeValueAsString(seat);
-        PrintWriter writer = resp.getWriter();
-        writer.print(json);
-        writer.flush();
+        resp.getWriter().print(json);
     }
 }
