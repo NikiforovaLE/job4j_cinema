@@ -21,6 +21,8 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
             integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
             crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
     <script>
         $(document).ready(function () {
             var seatId = window.location.href.split("=")[1];
@@ -28,11 +30,22 @@
                 type: 'POST',
                 url: "http://localhost:8080/cinema/hall",
                 data: seatId,
-                dataType: 'json',
-                success: function (data) {
-                    $('#selectedPlace').append("Вы выбрали ряд " + data.row + ", место " + data.seat + ". К оплате: " + 500 + " рублей.")
+                dataType: 'json'
+            }).done(function (data) {
+                var payment;
+                let row = data.row;
+                if (row === 1) {
+                    payment = 1500;
+                } else if (row === 2) {
+                    payment = 1000;
+                } else {
+                    payment = 500;
                 }
-            })
+                $('#selectedPlace h4:last').append("Вы выбрали ряд " + row + ", место " + data.seat +
+                    ". К оплате: " + payment + " рублей.")
+            }).fail(function (err) {
+                console.log(err);
+            });
         });
 
         function validate() {

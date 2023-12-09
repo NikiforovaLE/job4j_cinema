@@ -22,20 +22,6 @@
             crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>
-        function validate() {
-            if ($('input[name=place]:checked').length === 0) {
-                alert("Выберите место!");
-                return false;
-            }
-            pay();
-            return true;
-        }
-
-        function pay() {
-            var place = $('input[name=place]:checked').val();
-            window.location.href = '/cinema/payment.html?place=' + place;
-        }
-
         $(document).ready(function () {
             $.ajax({
                 type: 'GET',
@@ -53,6 +39,21 @@
                 console.log(err);
             });
         });
+
+        function validate() {
+            if ($('input[name=place]:checked').length === 0) {
+                alert("Выберите место!");
+                return false;
+            }
+            pay();
+            return true;
+        }
+
+        function pay() {
+            var place = $('input[name=place]:checked').val();
+            window.location.href = '/cinema/payment.html?seatId=' + place;
+        }
+
     </script>
     <title>Booking</title>
 </head>

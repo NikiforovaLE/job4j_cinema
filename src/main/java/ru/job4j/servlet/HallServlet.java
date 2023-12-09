@@ -32,6 +32,6 @@ public class HallServlet extends HttpServlet {
         Seat seat = service.findById(seatId);
         ObjectMapper objectMapper = new ObjectMapper();
         String json = objectMapper.writeValueAsString(seat);
-        resp.getWriter().print(json);
+        resp.getWriter().write(json);
     }
 }
