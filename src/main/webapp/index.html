@@ -32,8 +32,13 @@
                     if (place.seat === 1) {
                         $('#table').append('</tr><tr><td>' + place.row + '</td>');
                     }
-                    $('#table tr:last').append('<td><input type="radio" name="place" value=' + place.id + ' checked=' +
-                        place.bought + '>' + 'Ряд ' + place.row + ', Место ' + place.seat + '</td>');
+                    if (place.status === true) {
+                        $('#table tr:last').append('<td><input type="radio" name="place" value=' + place.id + 'disabled>' +
+                            'Ряд ' + place.row + ', Место ' + place.seat + '</td>');
+                    } else {
+                        $('#table tr:last').append('<td><input type="radio" name="place" value=' + place.id + ' checked=' +
+                            place.bought + '>' + 'Ряд ' + place.row + ', Место ' + place.seat + '</td>');
+                    }
                 }
             }).fail(function (err) {
                 console.log(err);

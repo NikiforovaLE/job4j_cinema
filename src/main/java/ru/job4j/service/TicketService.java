@@ -86,8 +86,16 @@ public class TicketService implements Service<Seat> {
         return null;
     }
 
-    @Override
     public void buy(int id, String userName, String phone) {
-        //buy a ticket
+        try (Connection cn = pool.getConnection()) {
+            PreparedStatement ps = cn.prepareStatement(
+                    "INSERT INTO tickets (seat_id, account_id, session_id) VALUES (?,?,?) ");
+            ps.setInt(1, id);
+            ps.setInt(2, id);
+            ps.setInt(3, id);
+            ps.execute();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

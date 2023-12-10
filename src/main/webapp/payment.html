@@ -41,8 +41,8 @@
                 } else {
                     payment = 500;
                 }
-                $('#selectedPlace h4:last').append("Вы выбрали ряд " + row + ", место " + data.seat +
-                    ". К оплате: " + payment + " рублей.")
+                $('#selectedPlace h3:last').append('Вы выбрали ряд ' + row + ', место ' + data.seat +
+                    '.' + '<h4>' + 'К оплате: ' + payment + ' рублей.' + '</h4>')
             }).fail(function (err) {
                 console.log(err);
             });
@@ -58,6 +58,26 @@
         }
 
         function payTicket() {
+            $.ajax({
+                type: 'POST',
+                url: "http://localhost:8080/cinema/hall",
+                data: seatId,
+                dataType: 'json'
+            }).done(function (data) {
+                var payment;
+                let row = data.row;
+                if (row === 1) {
+                    payment = 1500;
+                } else if (row === 2) {
+                    payment = 1000;
+                } else {
+                    payment = 500;
+                }
+                $('#selectedPlace h3:last').append('Вы выбрали ряд ' + row + ', место ' + data.seat +
+                    '.' + '<h4>' + 'К оплате: ' + payment + ' рублей.' + '</h4>')
+            }).fail(function (err) {
+                console.log(err);
+            });
             window.location.href = 'http://localhost:8080/cinema';
         }
 
@@ -69,7 +89,7 @@
 <body>
 <div class="container">
     <div class="row pt-3" id="selectedPlace">
-        <h4></h4>
+        <h3></h3>
     </div>
     <div class="row ">
         <form>
