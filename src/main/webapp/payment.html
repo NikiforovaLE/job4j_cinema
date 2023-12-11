@@ -58,27 +58,33 @@
         }
 
         function payTicket() {
+            var seatId = window.location.href.split("=")[1];
             $.ajax({
                 type: 'POST',
-                url: "http://localhost:8080/cinema/hall",
+                url: "http://localhost:8080/cinema/ticket",
                 data: seatId,
                 dataType: 'json'
             }).done(function (data) {
-                var payment;
-                let row = data.row;
-                if (row === 1) {
-                    payment = 1500;
-                } else if (row === 2) {
-                    payment = 1000;
-                } else {
-                    payment = 500;
-                }
-                $('#selectedPlace h3:last').append('Вы выбрали ряд ' + row + ', место ' + data.seat +
-                    '.' + '<h4>' + 'К оплате: ' + payment + ' рублей.' + '</h4>')
+
             }).fail(function (err) {
                 console.log(err);
             });
             window.location.href = 'http://localhost:8080/cinema';
+        }
+
+        function createAccount() {
+            var seatId = window.location.href.split("=")[1];
+            $.ajax({
+                type: 'POST',
+                url: "http://localhost:8080/cinema/payment",
+                data: seatId,
+                dataType: 'json'
+            }).done(function (data) {
+
+            }).fail(function (err) {
+                alert("Ошибка при попытке купить место. Попробуйте ещё раз");
+                window.location.href = 'http://localhost:8080/cinema';
+            });
         }
 
         function showHideControl() {

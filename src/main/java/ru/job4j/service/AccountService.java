@@ -7,10 +7,11 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.util.Collection;
 import java.util.Objects;
 import java.util.Properties;
 
-public class AccountService {
+public class AccountService implements Service<Account> {
     private final BasicDataSource pool = new BasicDataSource();
 
     private AccountService() {
@@ -39,25 +40,36 @@ public class AccountService {
         pool.setMaxOpenPreparedStatements(100);
     }
 
-    private static final class Lazy {
-        private static final Service<Account> INST = new AccountService();
+    @Override
+    public Collection<Account> findAll() {
+        return null;
     }
 
-    public static Service<Account> instOf() {
+    @Override
+    public Account findById(int id) {
+        return null;
+    }
+
+    private static final class Lazy {
+        private static final AccountService INST = new AccountService();
+    }
+
+    public static AccountService instOf() {
         return AccountService.Lazy.INST;
     }
 
-    void save() {
+    public boolean createAccount(String userName, String phone, String email) {
+        boolean result = false;
         try (Connection cn = pool.getConnection()) {
             PreparedStatement ps = cn.prepareStatement(
-                    "INSERT INTO tickets (seat_id, account_id, session_id) VALUES (?,?,?) ");
-            ps.setInt(1, id);
-            ps.setInt(2, id);
-            ps.setInt(3, id);
-            ps.execute();
+                    "INSERT INTO accounts (username, phone, email) VALUES (?,?,?) ");
+            ps.setString(1, userName);
+            ps.setString(2, phone);
+            ps.setString(3, email);
+            result = ps.execute();
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return result;
     }
-}
 }

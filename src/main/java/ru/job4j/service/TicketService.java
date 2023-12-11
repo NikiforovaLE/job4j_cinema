@@ -86,13 +86,13 @@ public class TicketService implements Service<Seat> {
         return null;
     }
 
-    public void buy(int id, String userName, String phone) {
+    public void createTicket(int seatId, int accountId, int sessionId) {
         try (Connection cn = pool.getConnection()) {
             PreparedStatement ps = cn.prepareStatement(
                     "INSERT INTO tickets (seat_id, account_id, session_id) VALUES (?,?,?) ");
-            ps.setInt(1, id);
-            ps.setInt(2, id);
-            ps.setInt(3, id);
+            ps.setInt(1, seatId);
+            ps.setInt(2, accountId);
+            ps.setInt(3, sessionId);
             ps.execute();
         } catch (Exception e) {
             e.printStackTrace();

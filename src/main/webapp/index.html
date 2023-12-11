@@ -32,12 +32,12 @@
                     if (place.seat === 1) {
                         $('#table').append('</tr><tr><td>' + place.row + '</td>');
                     }
-                    if (place.status === true) {
-                        $('#table tr:last').append('<td><input type="radio" name="place" value=' + place.id + 'disabled>' +
-                            'Ряд ' + place.row + ', Место ' + place.seat + '</td>');
+                    if (place.bought === true) {
+                        $('#table tr:last').append('<td><input type="radio" disabled>' +
+                            'Ряд ' + place.row + ', Место ' + place.seat + '<br>(Куплено)' + '</td>');
                     } else {
-                        $('#table tr:last').append('<td><input type="radio" name="place" value=' + place.id + ' checked=' +
-                            place.bought + '>' + 'Ряд ' + place.row + ', Место ' + place.seat + '</td>');
+                        $('#table tr:last').append('<td><input type="radio" name="place" value=' + place.id + '>' +
+                            'Ряд ' + place.row + ', Место ' + place.seat + '</td>');
                     }
                 }
             }).fail(function (err) {
@@ -46,17 +46,17 @@
         });
 
         function validate() {
-            if ($('input[name=place]:checked').length === 0) {
+            var place = $('input[name=place]:checked');
+            if (place.length === 0) {
                 alert("Выберите место!");
                 return false;
             }
-            pay();
+            pay(place);
             return true;
         }
 
-        function pay() {
-            var place = $('input[name=place]:checked').val();
-            window.location.href = '/cinema/payment.html?seatId=' + place;
+        function pay(place) {
+            window.location.href = '/cinema/payment.html?seatId=' + place.val();
         }
 
     </script>
