@@ -2,8 +2,8 @@ package ru.job4j.servlet;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ru.job4j.model.Seat;
+import ru.job4j.service.SeatService;
 import ru.job4j.service.Service;
-import ru.job4j.service.TicketService;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -13,14 +13,14 @@ import java.io.IOException;
 import java.util.List;
 
 public class HallServlet extends HttpServlet {
-    private final Service<Seat> service = TicketService.instOf();
+    private final Service<Seat> service = SeatService.instOf();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("application/json; charset=utf-8");
-        List<Seat> places = (List<Seat>) service.findAll();
+        List<Seat> seats = (List<Seat>) service.findAll();
         ObjectMapper objectMapper = new ObjectMapper();
-        String stringOfSeats = objectMapper.writeValueAsString(places);
+        String stringOfSeats = objectMapper.writeValueAsString(seats);
         resp.getWriter().write(stringOfSeats);
     }
 

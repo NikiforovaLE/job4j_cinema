@@ -1,23 +1,19 @@
 package ru.job4j.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Objects;
 
+@AllArgsConstructor
 @Getter
 @Setter
 public class Account {
     private int id;
-    private String name;
+    private String username;
     private String email;
     private String phone;
-
-    public Account(String name, String email, String phone) {
-        this.name = name;
-        this.email = email;
-        this.phone = phone;
-    }
 
     @Override
     public boolean equals(Object o) {

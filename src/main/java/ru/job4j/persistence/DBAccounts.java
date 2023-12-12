@@ -19,7 +19,7 @@ public class DBAccounts implements Store<Account> {
         try (Connection cn = pool.getConnection(); PreparedStatement ps = cn.prepareStatement("SELECT * FROM accounts;")) {
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    accounts.add(new Account(rs.getString("name"),
+                    accounts.add(new Account(rs.getInt("id"), rs.getString("username"),
                             rs.getString("email"), rs.getString("phone")));
                 }
             }
@@ -36,7 +36,7 @@ public class DBAccounts implements Store<Account> {
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    return new Account(rs.getString("name"), rs.getString("email"), rs.getString("'phone"));
+                    return new Account(rs.getInt("id"), rs.getString("name"), rs.getString("email"), rs.getString("'phone"));
                 }
             }
         } catch (Exception e) {
@@ -59,7 +59,7 @@ public class DBAccounts implements Store<Account> {
              PreparedStatement ps = cn.prepareStatement("INSERT INTO accounts(username, email, phone) VALUES (?,?,?)",
                      PreparedStatement.RETURN_GENERATED_KEYS)
         ) {
-            ps.setString(1, account.getName());
+            ps.setString(1, account.getUsername());
             ps.setString(2, account.getEmail());
             ps.setString(3, account.getPhone());
             ps.execute();
@@ -78,7 +78,7 @@ public class DBAccounts implements Store<Account> {
         try (Connection cn = pool.getConnection();
              PreparedStatement ps = cn.prepareStatement(
                      "UPDATE accounts SET username = ?, email = ?, phone = ? WHERE id = ?")) {
-            ps.setString(1, account.getName());
+            ps.setString(1, account.getUsername());
             ps.setString(2, account.getEmail());
             ps.setString(3, account.getPhone());
             ps.setInt(4, account.getId());

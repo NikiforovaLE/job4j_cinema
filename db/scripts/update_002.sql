@@ -1,12 +1,12 @@
-CREATE TABLE places
+CREATE TABLE seats
 (
     id       SERIAL PRIMARY KEY,
     row      INT NOT NULL,
-    seat     INT NOT NULL,
+    cell     INT NOT NULL,
     bought BOOLEAN
 );
 
-INSERT INTO places(row, seat, bought)
+INSERT INTO seats(row, cell, bought)
 VALUES (1, 1, TRUE),
        (1, 2, TRUE),
        (1, 3, TRUE),

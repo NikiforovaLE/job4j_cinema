@@ -1,7 +1,7 @@
 package ru.job4j.service;
 
 import org.apache.commons.dbcp2.BasicDataSource;
-import ru.job4j.model.Ticket;
+import ru.job4j.model.Seat;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -10,14 +10,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.*;
 
-public class TicketService implements Service<Ticket> {
+public class SeatService implements Service<Seat> {
     private final BasicDataSource pool = new BasicDataSource();
 
-    private TicketService() {
+    private SeatService() {
         Properties cfg = new Properties();
         try (BufferedReader io = new BufferedReader(
                 new InputStreamReader(
-                        Objects.requireNonNull(TicketService.class.getClassLoader()
+                        Objects.requireNonNull(SeatService.class.getClassLoader()
                                 .getResourceAsStream("db.properties"))
                 )
         )) {
@@ -40,22 +40,22 @@ public class TicketService implements Service<Ticket> {
     }
 
     private static final class Lazy {
-        private static final TicketService INST = new TicketService();
+        private static final SeatService INST = new SeatService();
     }
 
-    public static TicketService instOf() {
-        return TicketService.Lazy.INST;
+    public static SeatService instOf() {
+        return SeatService.Lazy.INST;
     }
 
     @Override
-    public Collection<Ticket> findAll() {
-        List<Ticket> tickets = new ArrayList<>();
+    public Collection<Seat> findAll() {
+        List<Seat> seats = new ArrayList<>();
         try (Connection cn = pool.getConnection()) {
-            PreparedStatement ps = cn.prepareStatement("SELECT * FROM tickets");
+            PreparedStatement ps = cn.prepareStatement("SELECT * FROM seats");
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    tickets.add(new Ticket(rs.getInt("id"), rs.getInt("seat_id"),
-                            rs.getInt("account_id"), rs.getInt("session_id")));
+                    seats.add(new Seat(rs.getInt("id"), rs.getInt("row"),
+                            rs.getInt("cell"), rs.getBoolean("bought")));
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -63,19 +63,19 @@ public class TicketService implements Service<Ticket> {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        tickets.sort(Comparator.comparingInt(Ticket::getId));
-        return tickets;
+        seats.sort(Comparator.comparingInt(Seat::getId));
+        return seats;
     }
 
     @Override
-    public Ticket findById(int id) {
+    public Seat findById(int id) {
         try (Connection cn = pool.getConnection()) {
-            PreparedStatement ps = cn.prepareStatement("SELECT * FROM tickets WHERE id=?");
+            PreparedStatement ps = cn.prepareStatement("SELECT * FROM seats WHERE id=?");
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    return new Ticket(rs.getInt("id"), rs.getInt("seat_id"),
-                            rs.getInt("account_id"), rs.getInt("session_id"));
+                    return new Seat(id, rs.getInt("row"), rs.getInt("cell"),
+                            rs.getBoolean("bought"));
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -86,23 +86,15 @@ public class TicketService implements Service<Ticket> {
         return null;
     }
 
-    public Ticket createTicket(Ticket ticket) {
+    public boolean boughtSeat(int id) {
+        boolean result = false;
         try (Connection cn = pool.getConnection()) {
-            PreparedStatement ps = cn.prepareStatement(
-                    "INSERT INTO tickets (seat_id, account_id, session_id) VALUES (?,?,?)",
-                    PreparedStatement.RETURN_GENERATED_KEYS);
-            ps.setInt(1, ticket.getSeatId());
-            ps.setInt(2, ticket.getAccountId());
-            ps.setInt(3, ticket.getSessionId());
-            ps.execute();
-            try (ResultSet id = ps.getGeneratedKeys()) {
-                if (id.next()) {
-                    ticket.setId(id.getInt(1));
-                }
-            }
+            PreparedStatement ps = cn.prepareStatement("UPDATE seats SET bought=true WHERE id=?");
+            ps.setInt(1, id);
+            result = ps.execute();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return ticket;
+        return result;
     }
 }

@@ -2,7 +2,9 @@ package ru.job4j.servlet;
 
 import ru.job4j.model.Account;
 import ru.job4j.model.Seat;
+import ru.job4j.model.Ticket;
 import ru.job4j.service.AccountService;
+import ru.job4j.service.SeatService;
 import ru.job4j.service.Service;
 import ru.job4j.service.TicketService;
 
@@ -13,13 +15,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class PaymentServlet extends HttpServlet {
-    private final Service<Seat> seatService = TicketService.instOf();
+    private final SeatService seatService = SeatService.instOf();
     private final AccountService accountService = AccountService.instOf();
-
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doGet(req, resp);
-    }
+    private final TicketService ticketService = TicketService.instOf();
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -27,13 +25,16 @@ public class PaymentServlet extends HttpServlet {
         int seatId = Integer.parseInt(req.getReader().readLine());
         Seat seat = seatService.findById(seatId);
         if (!seat.isBought()) {
-            if (accountService.createAccount(
-                    (String) req.getAttribute("username"), (String) req.getAttribute("email"),
-                    (String) req.getAttribute("phone"))) {
-                //something
+            Account account = accountService.createAccount(new Account(0, (String) req.getAttribute("username"),
+                    (String) req.getAttribute("email"),
+                    (String) req.getAttribute("phone")));
+            if (account.getId() != 0) {
+                ticketService.createTicket(new Ticket(0, seatId, account.getId(),
+                        Integer.parseInt(req.getSession().getId())));
+                seatService.boughtSeat(seatId);
             }
         } else {
-            //error
+            resp.sendError(1);
         }
     }
 }

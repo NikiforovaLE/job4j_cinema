@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.Properties;
@@ -58,18 +59,22 @@ public class AccountService implements Service<Account> {
         return AccountService.Lazy.INST;
     }
 
-    public boolean createAccount(String userName, String phone, String email) {
-        boolean result = false;
+    public Account createAccount(Account account) {
         try (Connection cn = pool.getConnection()) {
             PreparedStatement ps = cn.prepareStatement(
-                    "INSERT INTO accounts (username, phone, email) VALUES (?,?,?) ");
-            ps.setString(1, userName);
-            ps.setString(2, phone);
-            ps.setString(3, email);
-            result = ps.execute();
+                    "INSERT INTO accounts (username, phone, email) VALUES (?,?,?)",
+                    PreparedStatement.RETURN_GENERATED_KEYS);
+            ps.setString(1, account.getUsername());
+            ps.setString(2, account.getPhone());
+            ps.setString(3, account.getEmail());
+            try (ResultSet id = ps.getGeneratedKeys()) {
+                if (id.next()) {
+                    account.setId(id.getInt(1));
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return result;
+        return account;
     }
 }
