@@ -13,7 +13,7 @@ public class Ticket {
     private int id;
     private int seatId;
     private int accountId;
-    private int sessionId;
+    private String sessionId;
 
     @Override
     public boolean equals(Object o) {

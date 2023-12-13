@@ -15,20 +15,20 @@ CREATE TABLE seats
 );
 
 INSERT INTO seats(row, cell, bought)
-VALUES (1, 1, TRUE),
-       (1, 2, TRUE),
-       (1, 3, TRUE),
-       (2, 1, TRUE),
-       (2, 2, TRUE),
-       (2, 3, TRUE),
-       (3, 1, TRUE),
-       (3, 2, TRUE),
-       (3, 3, TRUE);
+VALUES (1, 1, FALSE),
+       (1, 2, FALSE),
+       (1, 3, FALSE),
+       (2, 1, FALSE),
+       (2, 2, FALSE),
+       (2, 3, FALSE),
+       (3, 1, FALSE),
+       (3, 2, FALSE),
+       (3, 3, FALSE);
 
 CREATE TABLE tickets
 (
     id         SERIAL PRIMARY KEY,
     seat_id    INT NOT NULL REFERENCES seats (id),
     account_id INT NOT NULL REFERENCES accounts (id),
-    session_id INT NOT NULL
+    session_id TEXT NOT NULL
 );

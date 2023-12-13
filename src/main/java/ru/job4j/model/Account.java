@@ -12,8 +12,8 @@ import java.util.Objects;
 public class Account {
     private int id;
     private String username;
-    private String email;
     private String phone;
+    private String email;
 
     @Override
     public boolean equals(Object o) {

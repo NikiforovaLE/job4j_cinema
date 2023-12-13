@@ -58,32 +58,17 @@
         }
 
         function payTicket() {
+            dataString = $("#userInfo").serialize();
             var seatId = window.location.href.split("=")[1];
             $.ajax({
                 type: 'POST',
-                url: "http://localhost:8080/cinema/ticket",
-                data: seatId,
+                url: "http://localhost:8080/cinema/pay?seatId=" + seatId,
+                data: dataString,
                 dataType: 'json'
             }).done(function (data) {
-
+                window.location.href = '/cinema/ticket.html?ticketId=' + data.id;
             }).fail(function (err) {
                 console.log(err);
-            });
-            window.location.href = 'http://localhost:8080/cinema';
-        }
-
-        function createAccount() {
-            var seatId = window.location.href.split("=")[1];
-            $.ajax({
-                type: 'POST',
-                url: "http://localhost:8080/cinema/payment",
-                data: seatId,
-                dataType: 'json'
-            }).done(function (data) {
-
-            }).fail(function (err) {
-                alert("Ошибка при попытке купить место. Попробуйте ещё раз");
-                window.location.href = 'http://localhost:8080/cinema';
             });
         }
 
@@ -98,23 +83,30 @@
         <h3></h3>
     </div>
     <div class="row ">
-        <form>
+        <form id="userInfo">
             <div class="form-group">
                 <label for="username">ФИО</label>
-                <input type="text" class="form-control" id="username" placeholder="ФИО">
+                <input type="text" class="form-control" id="username" name="username" placeholder="ФИО">
             </div>
             <div class="form-group">
                 <label for="phone">Номер телефона</label>
-                <input type="text" class="form-control" id="phone" placeholder="Номер телефона">
+                <input type="text" class="form-control" id="phone" name="phone" placeholder="Номер телефона">
             </div>
             <div class="checkbox">
                 <label for="email">Получить билет на почту</label>
                 <input onchange="showHideControl();" type="checkbox"/>
-                <input type="email" id="email" placeholder="email"/>
+                <input type="email" id="email" name="email" placeholder="email"/>
             </div>
             <button type="button" class="btn btn-success" onclick="return validate()">Оплатить</button>
         </form>
     </div>
 </div>
 </body>
+<footer>
+    <ul class="nav justify-content-center">
+        <li class="nav-item">
+            <a href="index.do">На главную страницу</a>
+        </li>
+    </ul>
+</footer>
 </html>
