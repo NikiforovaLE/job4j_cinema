@@ -32,15 +32,8 @@
                 data: seatId,
                 dataType: 'json'
             }).done(function (data) {
-                var payment;
                 let row = data.row;
-                if (row === 1) {
-                    payment = 1500;
-                } else if (row === 2) {
-                    payment = 1000;
-                } else {
-                    payment = 500;
-                }
+                var payment = getPaymentValue(row);
                 $('#selectedPlace h3:last').append('Вы выбрали ряд ' + row + ', место ' + data.seat +
                     '.' + '<h4>' + 'К оплате: ' + payment + ' рублей.' + '</h4>')
             }).fail(function (err) {
@@ -48,8 +41,20 @@
             });
         });
 
+        function getPaymentValue(row) {
+            var payment;
+            if (row === 1) {
+                payment = 1500;
+            } else if (row === 2) {
+                payment = 1000;
+            } else {
+                payment = 500;
+            }
+            return payment;
+        }
+
         function validate() {
-            if ($('#username').val() === '' || $('#phone').val() === '') {
+            if ($('#username').val() === '' || $('#phone').val() === '' || $('#email').val() === '') {
                 alert("Заполните все поля!");
                 return false;
             }
@@ -71,10 +76,6 @@
                 console.log(err);
             });
         }
-
-        function showHideControl() {
-            $('#email').toggle(true);
-        }
     </script>
 </head>
 <body>
@@ -92,9 +93,8 @@
                 <label for="phone">Номер телефона</label>
                 <input type="text" class="form-control" id="phone" name="phone" placeholder="Номер телефона">
             </div>
-            <div class="checkbox">
-                <label for="email">Получить билет на почту</label>
-                <input onchange="showHideControl();" type="checkbox"/>
+            <div class="form-group">
+                <label for="email">Почта</label>
                 <input type="email" id="email" name="email" placeholder="email"/>
             </div>
             <button type="button" class="btn btn-success" onclick="return validate()">Оплатить</button>
