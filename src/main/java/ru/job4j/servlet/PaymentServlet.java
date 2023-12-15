@@ -20,7 +20,7 @@ public class PaymentServlet extends HttpServlet {
     private final TicketService ticketService = TicketService.instOf();
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected synchronized void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("application/json; charset=utf-8");
         int seatId = Integer.parseInt(req.getParameter("seatId"));
         Seat seat = seatService.findById(seatId);
@@ -36,7 +36,7 @@ public class PaymentServlet extends HttpServlet {
                 resp.getWriter().write(json);
             }
         } else {
-            resp.sendError(1);
+            resp.sendError(1, "fail");
         }
     }
 }

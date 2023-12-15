@@ -73,7 +73,7 @@
             }).done(function (data) {
                 window.location.href = '/cinema/ticket.html?ticketId=' + data.id;
             }).fail(function (err) {
-                console.log(err);
+                window.location.href = '/cinema/fail.html';
             });
         }
     </script>
